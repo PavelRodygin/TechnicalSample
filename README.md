@@ -136,8 +136,6 @@ dataStream
 
 ## 📄 License
 
-[Specify project license]
+MIT License
 
 ---
-
-**ShrimpOlympus** - technical platform for modular development in Unity.
