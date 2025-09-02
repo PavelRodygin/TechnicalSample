@@ -1,4 +1,4 @@
-# ShrimpOlympus
+# TechnicalSample
 
 Technical Unity repository with modular architecture for developing and testing various mini-projects.
 
