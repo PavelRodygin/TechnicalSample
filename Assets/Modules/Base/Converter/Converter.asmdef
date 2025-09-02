@@ -1,0 +1,26 @@
+{
+    "name": "Converter",
+    "rootNamespace": "",
+    "references": [
+        "Core",
+        "Services",
+        "Systems",
+        "DynamicBackground",
+        "Unity.TextMeshPro",
+        "Unity.InputSystem",
+        "VContainer",
+        "R3.Unity",
+        "UniTask",
+        "DOTween.Modules",
+        "UniTask.DOTween"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
