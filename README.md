@@ -1,10 +1,10 @@
 # TechnicalSample
 
-Technical Unity repository with modular architecture for developing and testing various mini-projects.
+Technical Unity repository with modular architecture for developing and testing various projects.
 
 ## 🏗️ Architecture
 
-The project is built on modular architecture principles, where each module is an isolated and independent component. The architecture follows the **MVP (Model-View-Presenter)** pattern with the possibility of using **Stateless** for state management.
+The project is built on modular architecture principles, where each module is an isolated and independent. The architecture follows the **MVP (Model-View-Presenter)** pattern with the possibility of using **Stateless** for state management.
 
 ### Core Principles:
 - **Modularity**: Each module is encapsulated and independent
