@@ -1,10 +1,10 @@
 # TechnicalSample
 
-Technical Unity repository with modular architecture for developing and testing various projects.
+A technical repository with a Unity project containing my main architectural template for creating applications and games.
 
 ## 🏗️ Architecture
 
-The project is built on modular architecture principles, where each module is an isolated and independent. The architecture follows the **MVP (Model-View-Presenter)** pattern with the possibility of using **Stateless** for state management.
+The project is built on a modular architecture, where each module is independent, testable, and isolated. The module architecture follows the MVP (Model-View-Presenter) pattern, with the ability to add sub-states to the module using the .NET Stateless library, which is perfect for this task. The modularity of the architecture supports powerful SceneManagement and comprehensive work with DI (VContainer is used in the project).
 
 ### Core Principles:
 - **Modularity**: Each module is encapsulated and independent
