@@ -84,10 +84,11 @@ Assets/
 
 ## 🔧 Technologies
 
-- **Unity**: Main engine
-- **VContainer**: Dependency Injection container
+- **Unity**
 - **UniTask**: Asynchronous operations
 - **R3**: Reactive Extensions for Unity
+- **VContainer**: Dependency Injection container
+- **DOTween**: Animations
 - **Stateless**: State management (optional)
 
 ## ⚡ Reactive Programming with R3
