@@ -5,9 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Modules.Base.TicTac.Scripts
+namespace Modules.Base.TicTac.Scripts.GameState
 {
-    public class TicTacView : BaseView
+    public class TicTacGameStateView : BaseView
     {
         [SerializeField] private Button mainMenuButton;
         [SerializeField] private Button thirdPopupButton;
@@ -26,21 +26,27 @@ namespace Modules.Base.TicTac.Scripts
             HideInstantly();
         }
 
-        public void SetupEventListeners(
-            ReactiveCommand<Unit> onMainMenuButtonClicked, ReactiveCommand<int[]> onCellClicked, 
-            ReactiveCommand<Unit> onRestartButtonClicked, 
-            ReactiveCommand<Unit> onThirdPopupButtonClicked)
+        public void SetupEventListeners(TicTacCommands commands)
         {
             Debug.Log("TicTacView: Setting up event listeners");
             
             if (mainMenuButton != null)
-                mainMenuButton.onClick.AddListener(() => onMainMenuButtonClicked.Execute(Unit.Default));
+                mainMenuButton.OnClickAsObservable()
+                    .Where(_ => IsActive)
+                    .Subscribe(_ => commands.ExitCommand.Execute(Unit.Default))
+                    .AddTo(this);
 
             if (thirdPopupButton != null)
-                thirdPopupButton.onClick.AddListener(() => onThirdPopupButtonClicked.Execute(Unit.Default));
+                thirdPopupButton.OnClickAsObservable()
+                    .Where(_ => IsActive)
+                    .Subscribe(_ => { /* Third popup functionality can be added later */ })
+                    .AddTo(this);
 
             if (restartButton?.pulsatingButton != null)
-                restartButton.pulsatingButton.onClick.AddListener(() => onRestartButtonClicked.Execute(Unit.Default));
+                restartButton.pulsatingButton.OnClickAsObservable()
+                    .Where(_ => IsActive)
+                    .Subscribe(_ => commands.RestartCommand.Execute(Unit.Default))
+                    .AddTo(this);
 
             if (cellViews != null)
             {
@@ -54,7 +60,7 @@ namespace Modules.Base.TicTac.Scripts
                         if (index < cellViews.Length && cellViews[index] != null)
                         {
                             Debug.Log($"TicTacView: Initializing cell view [{i},{j}] at index {index}");
-                            cellViews[index].Initialize(i, j, onCellClicked);
+                            cellViews[index].Initialize(i, j, commands.CellClickCommand);
                         }
                         else
                         {

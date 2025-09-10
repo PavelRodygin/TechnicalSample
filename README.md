@@ -11,6 +11,13 @@ The project is built on a modular architecture, where each module is independent
 - **MVP Pattern**: Separation of logic into Model, View, and Presenter
 - **Dependency Injection**: Using VContainer for dependency management
 - **Asynchrony**: UniTask support for asynchronous operations
+- **State Management**: Optional Stateless FSM for complex state coordination
+
+### Architectural Patterns:
+- **Standard MVP**: Single Model-View-Presenter per module (MainMenu, Converter)
+- **State-Based MVP**: Multiple MVP triads with shared Model (TicTac)
+- **Module Controller**: Coordinates state transitions and module lifecycle
+- **Reactive Programming**: R3 integration for event-driven architecture
 
 ## 🛠️ Development Tools
 
@@ -32,9 +39,13 @@ Built-in tool for automatically creating new modules:
 ## 📦 Existing Modules
 
 ### Base Modules
-- **TicTac**: Mini-game "Tic-tac-toe" with full MVP implementation
-- **Converter**: Data conversion utility
-- **MainMenu**: Main application menu
+- **TicTac**: Mini-game "Tic-tac-toe" with **advanced state-based MVP architecture**
+  - Multiple MVP triads coordinated by Module Controller
+  - Stateless FSM demonstration with 3 states: Tutorial → Game → Result
+  - Educational example of complex state management patterns
+  - R3 reactive programming integration
+- **Converter**: Data conversion utility with unified MVP pattern
+- **MainMenu**: Main application menu with standard MVP architecture
 - **StartGame**: Game launch screen
 
 ### Test Modules
@@ -87,9 +98,13 @@ Assets/
 - **Unity**
 - **UniTask**: Asynchronous operations
 - **R3**: Reactive Extensions for Unity
+<<<<<<< Updated upstream
 - **VContainer**: Dependency Injection container
 - **DOTween**: Animations
 - **Stateless**: State management (optional)
+=======
+- **Stateless**: Advanced state machine library for complex state management
+>>>>>>> Stashed changes
 
 ## ⚡ Reactive Programming with R3
 
@@ -120,6 +135,32 @@ dataStream
 - **Automatic Cleanup**: Prevents memory leaks with `AddTo()` pattern
 - **Composition**: Easy combination of multiple event streams
 - **Performance**: Efficient event processing and UI updates
+
+## 🔄 State Management with Stateless
+
+The project demonstrates advanced state management patterns using **Stateless FSM library**:
+
+### TicTac Module Example:
+```
+Tutorial ↻ InitializeTutorial
+    ↓ StartGame
+  Game
+    ↓ PlayerWon/GameDraw
+ Result
+    ↓ Restart (→ Game) | Exit (→ Tutorial)
+```
+
+### Key Patterns:
+- **Multiple MVP States**: Each state has its own Model-View-Presenter triad
+- **Shared Model**: Common data model across all state MVPs
+- **Module Controller**: Coordinates state transitions without being part of MVP
+- **Stateless Features**: `PermitReentry()`, `Ignore()`, `Permit()` for robust state control
+
+### Benefits:
+- **Educational Value**: Demonstrates complex state management patterns
+- **Separation of Concerns**: Each state is independently managed
+- **Robust Transitions**: Validated state changes with clear error handling
+- **Scalability**: Easy to add new states or modify existing ones
 
 ## 📝 Features
 

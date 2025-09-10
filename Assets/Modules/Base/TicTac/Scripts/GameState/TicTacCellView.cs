@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Modules.Base.TicTac.Scripts
+namespace Modules.Base.TicTac.Scripts.GameState
 {
     public class TicTacCellView : MonoBehaviour
     {
@@ -75,6 +75,7 @@ namespace Modules.Base.TicTac.Scripts
             if (cellButton != null)
             {
                 cellButton.OnClickAsObservable()
+                    .Where(_ => _stateMachine.IsInState(CellState.Empty))
                     .Subscribe(_ => OnCellClicked())
                     .AddTo(_disposables);
             }
@@ -99,10 +100,7 @@ namespace Modules.Base.TicTac.Scripts
 
         private void OnCellClicked()
         {
-            if (_stateMachine.IsInState(CellState.Empty))
-            {
-                _onCellClicked?.Execute(new[] {_x, _y});
-            }
+            _onCellClicked?.Execute(new[] {_x, _y});
         }
 
         public void SetText(char text)
