@@ -1,4 +1,5 @@
 using System;
+using CodeBase.Core.Infrastructure;
 using CodeBase.Core.Patterns.Architecture.MVP;
 using Cysharp.Threading.Tasks;
 using R3;
@@ -18,6 +19,8 @@ namespace Modules.Base.TicTac.Scripts.GameState
         private readonly ReactiveCommand<Unit> _restartCommand = new();
         private readonly ReactiveCommand<Unit> _mainMenuCommand = new();
 
+        private ReactiveCommand<ModulesMap> _openNewModuleCommand;
+
         public ReactiveCommand<int[]> CellCommand => _cellCommand;
         public ReactiveCommand<Unit> RestartCommand => _restartCommand;
         public ReactiveCommand<Unit> MainMenuCommand => _mainMenuCommand;
@@ -26,12 +29,14 @@ namespace Modules.Base.TicTac.Scripts.GameState
         {
             _gameStateView = gameStateView ?? throw new ArgumentNullException(nameof(gameStateView));
             _gameModel = gameModel ?? throw new ArgumentNullException(nameof(gameModel));
-            
-            SubscribeToCommands();
         }
 
         public async UniTask Enter(object param)
         {
+            _openNewModuleCommand = param as ReactiveCommand<ModulesMap> ?? throw new ArgumentException("Expected ReactiveCommand<ModulesMap>", nameof(param));
+            
+            SubscribeToCommands();
+            
             _gameModel.InitializeGame();
             var commands = new TicTacCommands(_restartCommand, _restartCommand, _mainMenuCommand, _cellCommand);
             _gameStateView.SetupEventListeners(commands);
@@ -81,20 +86,33 @@ namespace Modules.Base.TicTac.Scripts.GameState
                 .AddTo(_disposables);
         }
 
-        private void OnCellClicked(int x, int y)
+        private async void OnCellClicked(int x, int y)
         {
-            // Cell click logic is now handled by the main controller
-            // This method is kept for compatibility but doesn't contain game logic
+            if (_gameModel.StateMachine.State != TicTacGameStates.Game) return;
+            
+            _gameModel.MakeMove(x, y);
+            UpdateBoardDisplay(_gameModel.Board);
+                
+            char winner = _gameModel.CheckWinner();
+            
+            if (winner != '\0')
+            {
+                var winningPositions = _gameModel.GetWinningPositions();
+                MarkWinningCells(winningPositions);
+                await _gameModel.ChangeState(TicTacGameTriggers.PlayerWon);
+            }
+            else if (_gameModel.IsBoardFull()) 
+            {
+                await _gameModel.ChangeState(TicTacGameTriggers.GameDraw);
+            }
         }
 
-        private void OnRestartButtonClicked()
-        {
-            // Restart logic is now handled by the main controller
-        }
+        private async void OnRestartButtonClicked() => 
+            await _gameModel.ChangeState(TicTacGameTriggers.Restart);
 
         private void OnMainMenuButtonClicked()
         {
-            // Main menu logic is now handled by the main controller
+            _openNewModuleCommand?.Execute(ModulesMap.MainMenu);
         }
     }
 }

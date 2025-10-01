@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 
 namespace TMPro.Examples
@@ -23,7 +24,7 @@ namespace TMPro.Examples
 
                 if (SpawnType == 0)
                 {
-                    // TextMesh Pro Infrastructure
+                    // TextMesh Pro Implementation
                     GameObject go = new GameObject();
                     go.transform.position = new Vector3(Random.Range(-95f, 95f), 0.25f, Random.Range(-95f, 95f));
 
@@ -34,7 +35,7 @@ namespace TMPro.Examples
 
                     textMeshPro.alignment = TextAlignmentOptions.Bottom;
                     textMeshPro.fontSize = 96;
-                    textMeshPro.enableKerning = false;
+                    textMeshPro.fontFeatures.Clear();
 
                     textMeshPro.color = new Color32(255, 255, 0, 255);
                     textMeshPro.text = "!";
@@ -47,7 +48,7 @@ namespace TMPro.Examples
                 }
                 else if (SpawnType == 1)
                 {
-                    // TextMesh Infrastructure
+                    // TextMesh Implementation
                     GameObject go = new GameObject();
                     go.transform.position = new Vector3(Random.Range(-95f, 95f), 0.25f, Random.Range(-95f, 95f));
 

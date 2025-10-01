@@ -37,9 +37,15 @@ namespace CodeBase.Implementation.Infrastructure
 
         private static void RegisterConfiguration(IContainerBuilder builder)
         {
+            // Load configuration from Resources folder (works in both editor and builds)
+            var configTextAsset = Resources.Load<TextAsset>("appsettings");
+            if (configTextAsset == null)
+            {
+                throw new System.IO.FileNotFoundException("appsettings.json not found in Resources folder");
+            }
+
             IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Application.dataPath + "/ThirdParty/Configuration")
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+                .AddJsonStream(new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(configTextAsset.text)))
                 .Build();
             builder.RegisterInstance(configuration);
         }

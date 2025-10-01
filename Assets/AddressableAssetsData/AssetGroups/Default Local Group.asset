@@ -16,27 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: a25671c943dee6f40b05dc588a0f9d1b
-  m_SerializeEntries:
-  - m_GUID: 09a294848e97ef646a8f59188514ed9a
-    m_Address: FurnitureContainer
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ba77f567e2e3bec47ad35c338f7a6f87
-    m_Address: MusicalInstrumentsContainer
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c4c3b03043b62d54f93eed4fb115a109
-    m_Address: 'PresentContainer '
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ffbe4e4e27216d44b983f7261e9badb1
-    m_Address: ElectronicsContainer
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 6ab0413fc51a2494ead4f2c420a037b0, type: 2}
   m_SchemaSet:

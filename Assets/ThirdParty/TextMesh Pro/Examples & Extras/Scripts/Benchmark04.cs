@@ -1,9 +1,10 @@
 using UnityEngine;
+using System.Collections;
 
 
 namespace TMPro.Examples
 {
-    
+
     public class Benchmark04 : MonoBehaviour
     {
 
@@ -30,7 +31,7 @@ namespace TMPro.Examples
             {
                 if (SpawnType == 0)
                 {
-                    // TextMesh Pro Infrastructure
+                    // TextMesh Pro Implementation
                     GameObject go = new GameObject("Text - " + i + " Pts");
 
                     if (lineHeight > orthoSize * 2) return;
@@ -44,7 +45,7 @@ namespace TMPro.Examples
                     //textMeshPro.anchor = AnchorPositions.Left;
                     textMeshPro.rectTransform.pivot = new Vector2(0, 0.5f);
 
-                    textMeshPro.enableWordWrapping = false;
+                    textMeshPro.textWrappingMode = TextWrappingModes.NoWrap;
                     textMeshPro.extraPadding = true;
                     textMeshPro.isOrthographic = true;
                     textMeshPro.fontSize = i;
@@ -56,7 +57,7 @@ namespace TMPro.Examples
                 }
                 else
                 {
-                    // TextMesh Infrastructure
+                    // TextMesh Implementation
                     // Causes crashes since atlas needed exceeds 4096 X 4096
                     /*
                     GameObject go = new GameObject("Arial " + i);
@@ -64,7 +65,7 @@ namespace TMPro.Examples
                     //if (lineHeight > orthoSize * 2 * 0.9f) return;
 
                     go.transform.position = m_Transform.position + new Vector3(ratio * -orthoSize * 0.975f, orthoSize * 0.975f - lineHeight, 1);
-                                       
+
                     TextMesh textMesh = go.AddComponent<TextMesh>();
                     textMesh.font = Resources.Load("Fonts/ARIAL", typeof(Font)) as Font;
                     textMesh.renderer.sharedMaterial = textMesh.font.material;

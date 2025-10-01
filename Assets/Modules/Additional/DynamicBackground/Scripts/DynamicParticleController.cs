@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Modules.Additional.DynamicBackground.Scripts
@@ -13,17 +15,26 @@ namespace Modules.Additional.DynamicBackground.Scripts
         private void OnEnable()
         {
             _previousParameter = parameter;
+#if UNITY_EDITOR
             EditorApplication.update += EditorUpdate;
+#endif
         }
 
-        private void OnDisable() => EditorApplication.update -= EditorUpdate;
+        private void OnDisable()
+        {
+#if UNITY_EDITOR
+            EditorApplication.update -= EditorUpdate;
+#endif
+        }
 
+#if UNITY_EDITOR
         private void EditorUpdate()
         {
             if (Mathf.Approximately(parameter, _previousParameter)) return;
             UpdateParticleSystem(parameter);
             _previousParameter = parameter;
         }
+#endif
 
         private void UpdateParticleSystem(float param)
         {

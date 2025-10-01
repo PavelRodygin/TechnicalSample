@@ -2,6 +2,7 @@
 // This code can only be used under the standard Unity Asset Store End User License Agreement.
 // A Copy of the Asset Store EULA is available at http://unity3d.com/company/legal/as_terms.
 
+using System;
 using UnityEngine;
 
 namespace UltimateClean
@@ -23,6 +24,7 @@ namespace UltimateClean
 
         private NotificationQueue queue;
 
+        [Obsolete("Obsolete")]
         private void Start()
         {
             queue = FindObjectOfType<NotificationQueue>();
@@ -36,8 +38,7 @@ namespace UltimateClean
             }
             else
             {
-                var go = Instantiate(Prefab);
-                go.transform.SetParent(Canvas.transform, false);
+                var go = Instantiate(Prefab, Canvas.transform, false);
 
                 var notification = go.GetComponent<Notification>();
                 notification.Launch(Type, Position, Duration, Title, Message);

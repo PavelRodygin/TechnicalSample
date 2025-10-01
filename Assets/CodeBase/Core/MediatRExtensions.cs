@@ -20,13 +20,13 @@ namespace CodeBase.Core
 
         public object GetService(Type serviceType)
         {
-            if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            /*if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
             {
                 var elementType = serviceType.GetGenericArguments()[0];
                 var method = typeof(IObjectResolver).GetMethod("ResolveAll")?.MakeGenericMethod(elementType);
                 var result = method?.Invoke(_resolver, null);
                 return result ?? Array.CreateInstance(elementType, 0);
-            }
+            }*/
 
             try { return _resolver.Resolve(serviceType); }
             catch (VContainerException ex)

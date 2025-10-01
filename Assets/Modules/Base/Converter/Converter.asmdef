@@ -12,7 +12,9 @@
         "R3.Unity",
         "UniTask",
         "DOTween.Modules",
-        "UniTask.DOTween"
+        "UniTask.DOTween",
+        "UnityEditor.UI",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -79,19 +79,27 @@ namespace Modules.Base.TicTac.Scripts
                 .OnExitAsync(async () => await onExitTutorial())
                 .PermitReentry(TicTacGameTriggers.InitializeTutorial) // Allow re-entering Tutorial for initialization
                 .Permit(TicTacGameTriggers.StartGame, TicTacGameStates.Game)
-                .Ignore(TicTacGameTriggers.Exit); // Ignore exit in tutorial, handle at controller level
+                .Ignore(TicTacGameTriggers.Exit) // Ignore exit in tutorial, handle at controller level
+                .Ignore(TicTacGameTriggers.PlayerWon) // Ignore game triggers in tutorial
+                .Ignore(TicTacGameTriggers.GameDraw) // Ignore game triggers in tutorial
+                .Ignore(TicTacGameTriggers.Restart); // Ignore restart in tutorial
 
             _stateMachine.Configure(TicTacGameStates.Game)
                 .OnEntryAsync(async () => await onEnterGame())
                 .OnExitAsync(async () => await onExitGame())
                 .Permit(TicTacGameTriggers.PlayerWon, TicTacGameStates.Result)
-                .Permit(TicTacGameTriggers.GameDraw, TicTacGameStates.Result);
+                .Permit(TicTacGameTriggers.GameDraw, TicTacGameStates.Result)
+                .Ignore(TicTacGameTriggers.Exit) // Ignore exit in game, handle at controller level
+                .Ignore(TicTacGameTriggers.InitializeTutorial); // Ignore tutorial trigger in game
 
             _stateMachine.Configure(TicTacGameStates.Result)
                 .OnEntryAsync(async () => await onEnterResult())
                 .OnExitAsync(async () => await onExitResult())
                 .Permit(TicTacGameTriggers.Restart, TicTacGameStates.Game)
-                .Permit(TicTacGameTriggers.Exit, TicTacGameStates.Tutorial);
+                .Permit(TicTacGameTriggers.Exit, TicTacGameStates.Tutorial)
+                .Ignore(TicTacGameTriggers.PlayerWon) // Ignore if accidentally triggered in Result state
+                .Ignore(TicTacGameTriggers.GameDraw) // Ignore if accidentally triggered in Result state
+                .Ignore(TicTacGameTriggers.InitializeTutorial); // Ignore tutorial trigger in result
         }
 
         /// <summary>

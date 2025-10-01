@@ -69,7 +69,7 @@ namespace CodeBase.Services
         {
             return modulesMap switch
             {
-                ModulesMap.StartGame => new List<AdditiveScenesMap>(),
+                ModulesMap.Bootstrap => new List<AdditiveScenesMap>(),
                 ModulesMap.Converter => new List<AdditiveScenesMap> {AdditiveScenesMap.DynamicBackground},
                 ModulesMap.MainMenu => new List<AdditiveScenesMap>(),
                 ModulesMap.TicTac => new List<AdditiveScenesMap>(),

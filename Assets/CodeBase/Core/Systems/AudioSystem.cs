@@ -29,7 +29,11 @@ namespace CodeBase.Core.Systems
 
         public event Action<float> OnSoundsVolumeChanged;
 
-        private void Start() => _saveSystem.AddSystem(this);
+        private void Start()
+        {
+            if (_saveSystem != null)
+                _saveSystem.AddSystem(this);
+        }
 
         public void PlayGameMelody() => PlayMusic(gameMelodyClip);
         

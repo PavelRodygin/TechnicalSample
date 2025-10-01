@@ -59,13 +59,9 @@ namespace CodeBase.Implementation.Infrastructure
             await _semaphoreSlim.WaitAsync(); //Asynchronously waits to enter the SemaphoreSlim.
             try
             {
-                // if (splashScreenRequired) _splashScreenPresenter.Activate(); TODO
                 await _sceneService.LoadScenesForModule(modulesMap);
                 await _sceneService.UnloadUnusedScenesAsync();
-                // if (splashScreenRequired) _splashScreenPresenter.Deactivate();
-
-                // Set the newly loaded module scene as active to handle lighting, etc.
-                // This ensures the module's scene becomes the main one.
+                
                 var moduleScene = SceneManager.GetSceneByName(modulesMap.ToString());
                 if (moduleScene.IsValid())
                     SceneManager.SetActiveScene(moduleScene);

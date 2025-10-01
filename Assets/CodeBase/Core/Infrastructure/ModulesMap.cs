@@ -3,10 +3,11 @@ namespace CodeBase.Core.Infrastructure
     public enum ModulesMap
     {
         None,
-        StartGame,
+        Bootstrap,
         MainMenu,
         Converter,
         TicTac,
+        Playground3D,
         DeliveryTycoon
     }
 }

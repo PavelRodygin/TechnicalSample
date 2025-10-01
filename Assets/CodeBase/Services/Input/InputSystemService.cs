@@ -22,15 +22,17 @@ namespace CodeBase.Services.Input
 
         public InputSystem_Actions InputActions { get; private set; }
         
-        // Events for switching between input modes
         public event Action OnSwitchToUI;
-        public event Action OnSwitchToPlayer;
+        public event Action OnSwitchToPlayerHumanoid;
+        public event Action OnSwitchToCrane;
+        // public event Action OnSwitchToWhatDoYouWant;
+        // Also may be replaced by Action<ActionMap>
         
         public void Start()
         {
             CreateInputSystemActions();
             InitializeEventSystem();
-            InputActions.UI.Enable(); // Enable UI Action Map by default
+            InputActions.UI.Enable(); 
         }
         
         /// <summary>
@@ -38,21 +40,35 @@ namespace CodeBase.Services.Input
         /// </summary>
         public void SwitchToUI()
         {
-            // InputActions.Player.Disable(); // Commented out - Player ActionMap not implemented yet
-            InputActions.UI.Enable(); // Ensure UI is always enabled
+            InputActions.PlayerHumanoid.Disable();
+            InputActions.Crane.Disable();
+            InputActions.UI.Enable(); // Убеждаемся, что UI всегда включён
             Debug.Log("Switched to UI mode.");
             OnSwitchToUI?.Invoke();
         }
 
         /// <summary>
-        /// Enables Player Action Map, keeping UI enabled.
+        /// Enables PlayerHumanoid Action Map, keeping UI enabled.
         /// </summary>
-        public void SwitchToPlayer()
+        public void SwitchToPlayerHumanoid()
         {
-            // InputActions.Player.Enable(); // Commented out - Player ActionMap not implemented yet
-            InputActions.UI.Enable(); // UI remains enabled
-            Debug.Log("Switched to Player mode.");
-            OnSwitchToPlayer?.Invoke();
+            InputActions.Crane.Disable();
+            InputActions.PlayerHumanoid.Enable();
+            InputActions.UI.Enable(); // UI остаётся включённым
+            Debug.Log("Switched to PlayerHumanoid mode.");
+            OnSwitchToPlayerHumanoid?.Invoke();
+        }
+
+        /// <summary>
+        /// Enables Crane Action Map, keeping UI enabled.
+        /// </summary>
+        public void SwitchToCrane()
+        {
+            InputActions.PlayerHumanoid.Disable();
+            InputActions.Crane.Enable();
+            InputActions.UI.Enable(); // UI остаётся включённым
+            Debug.Log("Switched to Crane mode.");
+            OnSwitchToCrane?.Invoke();
         }
 
         /// <summary>
@@ -70,17 +86,23 @@ namespace CodeBase.Services.Input
         public void DisableUI()
         {
             Debug.LogWarning("UI Action Map cannot be disabled as per design.");
-            InputActions.UI.Enable(); // Ignore disable attempt
+            InputActions.UI.Enable(); // Игнорируем попытку отключения
         }
-        
+
         /// <summary>
-        /// Checks if the Player Action Map is enabled.
+        /// Checks if the UI Action Map is enabled.
         /// </summary>
-        public bool IsPlayerInputEnabled() 
-        {
-            // return InputActions.Player.enabled; // Commented out - Player ActionMap not implemented yet
-            return false; // Temporary return until Player ActionMap is implemented
-        }
+        public bool IsUIInputEnabled() => InputActions.UI.enabled;
+
+        /// <summary>
+        /// Checks if the PlayerHumanoid Action Map is enabled.
+        /// </summary>
+        public bool IsPlayerHumanoidInputEnabled() => InputActions.PlayerHumanoid.enabled;
+
+        /// <summary>
+        /// Checks if the Crane Action Map is enabled.
+        /// </summary>
+        public bool IsCraneInputEnabled() => InputActions.Crane.enabled;
         
         /// <summary>
         /// Sets the first selected object for UI navigation.
@@ -88,28 +110,22 @@ namespace CodeBase.Services.Input
         /// <param name="selectedObject">The object to be set as the first selected.</param>
         public void SetFirstSelectedObject(Selectable selectedObject)
         {
-            if (_eventSystem == null)
+            if (!_eventSystem)
             {
                 Debug.LogWarning("EventSystem is not initialized. Cannot set first selected object.");
                 return;
             }
 
-            if (selectedObject == null)
+            if (!selectedObject)
             {
-                Debug.LogWarning("Selected object is null.");
-                _eventSystem.SetSelectedGameObject(null);
+                Debug.LogWarning("Selected object is null. Cannot set first selected object.");
                 return;
             }
 
             _eventSystem.SetSelectedGameObject(selectedObject.gameObject);
         }
         
-        /// <summary>
-        /// Gets the full action path for debugging purposes.
-        /// </summary>
-        /// <param name="action">The input action to get path for.</param>
-        /// <returns>Full path in format "MapName/ActionName".</returns>
-        public string GetFullActionPath(InputAction action)
+        public string GetStringActionPath(InputAction action)
         {
             if (action == null)
             {
@@ -122,26 +138,49 @@ namespace CodeBase.Services.Input
             return $"{mapName}/{actionName}";
         }
         
-        /// <summary>
-        /// Creates an Observable for input action performed events.
-        /// </summary>
-        /// <param name="action">The input action to observe.</param>
-        /// <returns>Observable that emits Unit when action is performed.</returns>
+        public Observable<Unit> GetStartedObservable(InputAction action)
+        {
+            if (action == null)
+            {
+                Debug.LogWarning("InputAction is null. Cannot create Started Observable.");
+                return Observable.Empty<Unit>();
+            }
+
+            return Observable.FromEvent(
+                (Action<InputAction.CallbackContext> h) => action.started += h,
+                h => action.started -= h
+            ).Select(_ => Unit.Default);
+        }
+        
         public Observable<Unit> GetPerformedObservable(InputAction action)
         {
             if (action == null)
             {
-                Debug.LogWarning("InputAction is null. Cannot create Observable.");
-                return Observable.Empty<Unit>(); // Return empty Observable on error
+                Debug.LogWarning("InputAction is null. Cannot create Performed Observable.");
+                return Observable.Empty<Unit>();
             }
 
             return Observable.FromEvent(
                 (Action<InputAction.CallbackContext> h) => action.performed += h,
                 h => action.performed -= h
-            ).Select(_ => Unit.Default); // Convert to Unit for unification
+            ).Select(_ => Unit.Default);
+        }
+        
+        public Observable<Unit> GetCanceledObservable(InputAction action)
+        {
+            if (action == null)
+            {
+                Debug.LogWarning("InputAction is null. Cannot create Canceled Observable.");
+                return Observable.Empty<Unit>();
+            }
+
+            return Observable.FromEvent(
+                (Action<InputAction.CallbackContext> h) => action.canceled += h,
+                h => action.canceled -= h
+            ).Select(_ => Unit.Default);
         }
 
-        // TODO: Watch UnityEvent to Observable conversion (Unity built-in script)
+        //The reference of getting observables:
         // public static Observable<Unit> AsObservable(this UnityEngine.Events.UnityEvent unityEvent, CancellationToken cancellationToken = default)
         // {
         //     return Observable.FromEvent(h => new UnityAction(h), h => unityEvent.AddListener(h), h => unityEvent.RemoveListener(h), cancellationToken);
@@ -156,7 +195,8 @@ namespace CodeBase.Services.Input
         {
             if (InputActions == null) return;
 
-            // InputActions.Player.Disable(); // Commented out - Player ActionMap not implemented yet
+            InputActions.PlayerHumanoid.Disable();
+            InputActions.Crane.Disable();
             InputActions.UI.Disable();
             
             InputActions.Disable();
@@ -169,16 +209,14 @@ namespace CodeBase.Services.Input
         private void InitializeEventSystem()    
         {
             _eventSystem = Object.FindObjectOfType<EventSystem>();
-            if (_eventSystem == null)
+            if (!_eventSystem)
             {
                 _eventSystem = CreateEventSystem();
                 _uiInputModule.actionsAsset = InputActions.asset;
                 Object.DontDestroyOnLoad(_eventSystem.gameObject);
             }
             else
-            {
                 Debug.Log("Found existing EventSystem.");
-            }
         }
 
         /// <summary>

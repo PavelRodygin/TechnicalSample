@@ -1,4 +1,5 @@
 using System;
+using CodeBase.Core.Infrastructure;
 using CodeBase.Core.Patterns.Architecture.MVP;
 using Cysharp.Threading.Tasks;
 using R3;
@@ -16,6 +17,8 @@ namespace Modules.Base.TicTac.Scripts.GameResultState
 
         private readonly ReactiveCommand<Unit> _restartCommand = new();
         private readonly ReactiveCommand<Unit> _mainMenuCommand = new();
+        
+        private ReactiveCommand<ModulesMap> _openNewModuleCommand;
 
         public ReactiveCommand<Unit> RestartCommand => _restartCommand;
         public ReactiveCommand<Unit> MainMenuCommand => _mainMenuCommand;
@@ -30,6 +33,8 @@ namespace Modules.Base.TicTac.Scripts.GameResultState
 
         public async UniTask Enter(object param)
         {
+            _openNewModuleCommand = param as ReactiveCommand<ModulesMap> ?? throw new ArgumentException("Expected ReactiveCommand<ModulesMap>", nameof(param));
+            
             var commands = new TicTacCommands(_restartCommand, _restartCommand, _mainMenuCommand, null);
             _resultView.SetupEventListeners(commands);
             
@@ -73,14 +78,14 @@ namespace Modules.Base.TicTac.Scripts.GameResultState
                 .AddTo(_disposables);
         }
 
-        private void OnRestartButtonClicked()
+        private async void OnRestartButtonClicked()
         {
-            // Restart logic is handled by the main controller
+            await _gameModel.ChangeState(TicTacGameTriggers.Restart);
         }
 
         private void OnMainMenuButtonClicked()
         {
-            // Main menu logic is handled by the main controller
+            _openNewModuleCommand?.Execute(ModulesMap.MainMenu);
         }
     }
 }

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using CodeBase.Core.Infrastructure;
 using CodeBase.Core.Infrastructure.Modules;
 using CodeBase.Core.Patterns.Architecture.MVP;
+using Modules.Base.Bootstrap.Scripts;
 using Modules.Base.Converter.Scripts;
 using Modules.Base.MainMenu.Scripts;
-using Modules.Base.StartGame.Scripts;
+using Modules.Base.Playground3D.Scripts;
 using Modules.Base.TicTac.Scripts;
 using VContainer;
 
@@ -23,10 +24,11 @@ namespace CodeBase.Implementation.Infrastructure
         {
             _map = new Dictionary<ModulesMap, Type> 
             {
-                { ModulesMap.StartGame, typeof(StartGameScreenPresenter) },
+                { ModulesMap.Bootstrap, typeof(BootstrapModuleController) },
                 { ModulesMap.Converter, typeof(ConverterModuleController) },
                 { ModulesMap.MainMenu, typeof(MainMenuModuleController) },
                 { ModulesMap.TicTac, typeof(TicTacModuleController) },
+                { ModulesMap.Playground3D, typeof(Playground3DModuleController) },
             };
         }
 

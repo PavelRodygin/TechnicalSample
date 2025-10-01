@@ -6,7 +6,9 @@
         "Core",
         "Services",
         "Implementation",
-        "Systems"
+        "Systems",
+        "UnityEditor.UI",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

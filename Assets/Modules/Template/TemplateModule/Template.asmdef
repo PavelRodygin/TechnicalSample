@@ -11,7 +11,9 @@
         "DOTween.Modules",
         "Core",
         "Systems",
-        "Services"
+        "Services",
+        "UnityEditor.UI",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -50,7 +50,7 @@ namespace TMPro.Examples
         {
             if (SpawnType == 0)
             {
-                // TextMesh Pro Infrastructure
+                // TextMesh Pro Implementation
                 m_textMeshPro = m_floatingText.AddComponent<TextMeshPro>();
                 m_textMeshPro.rectTransform.sizeDelta = new Vector2(3, 3);
 
@@ -65,7 +65,7 @@ namespace TMPro.Examples
                 m_textMeshPro.fontSize = 24;
                 //m_textMeshPro.enableExtraPadding = true;
                 //m_textMeshPro.enableShadows = false;
-                m_textMeshPro.enableKerning = false;
+                m_textMeshPro.fontFeatures.Clear();
                 m_textMeshPro.text = string.Empty;
                 m_textMeshPro.isTextObjectScaleStatic = IsTextObjectScaleStatic;
 

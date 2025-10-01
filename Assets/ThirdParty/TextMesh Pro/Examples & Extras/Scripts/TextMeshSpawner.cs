@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 
 namespace TMPro.Examples
@@ -26,7 +27,7 @@ namespace TMPro.Examples
             {
                 if (SpawnType == 0)
                 {
-                    // TextMesh Pro Infrastructure     
+                    // TextMesh Pro Implementation     
                     //go.transform.localScale = new Vector3(2, 2, 2);
                     GameObject go = new GameObject(); //"NPC " + i);
                     go.transform.position = new Vector3(Random.Range(-95f, 95f), 0.5f, Random.Range(-95f, 95f));
@@ -52,7 +53,7 @@ namespace TMPro.Examples
                 }
                 else
                 {
-                    // TextMesh Infrastructure
+                    // TextMesh Implementation
                     GameObject go = new GameObject(); //"NPC " + i);
                     go.transform.position = new Vector3(Random.Range(-95f, 95f), 0.5f, Random.Range(-95f, 95f));
 

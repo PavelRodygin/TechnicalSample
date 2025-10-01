@@ -4,7 +4,9 @@
     "references": [
         "VContainer",
         "Core",
-        "Services"
+        "Services",
+        "UnityEditor.UI",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

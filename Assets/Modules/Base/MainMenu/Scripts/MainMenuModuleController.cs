@@ -15,6 +15,7 @@ namespace Modules.Base.MainMenu.Scripts
         private readonly MainMenuModuleModel _mainMenuModuleModel;
         private readonly MainMenuPresenter _mainMenuPresenter;
         private readonly IScreenStateMachine _screenStateMachine;
+        
         private readonly ReactiveCommand<ModulesMap> _openNewModuleCommand = new();
         
         private readonly CompositeDisposable _disposables = new();
@@ -48,15 +49,12 @@ namespace Modules.Base.MainMenu.Scripts
         public void Dispose()
         {
             _disposables.Dispose();
-            
             _mainMenuPresenter.Dispose();
-            
             _mainMenuModuleModel.Dispose();
         }
 
         private void SubscribeToModuleUpdates()
         {
-            // Prevent rapid module switching
             _openNewModuleCommand
                 .ThrottleFirst(TimeSpan.FromMilliseconds(_mainMenuModuleModel.ModuleTransitionThrottleDelay))
                 .Subscribe(RunNewModule)

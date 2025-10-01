@@ -1,9 +1,7 @@
 using CodeBase.Core.Systems;
 using CodeBase.Core.Systems.PopupHub;
 using CodeBase.Core.Systems.PopupHub.Popups;
-using CodeBase.Services;
 using CodeBase.Services.Input;
-using CodeBase.Systems.InputSystem;
 using R3;
 using TMPro;
 using UnityEngine;

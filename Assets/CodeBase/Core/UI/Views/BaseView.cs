@@ -8,17 +8,17 @@ namespace CodeBase.Core.UI.Views
     [RequireComponent(typeof(Canvas))]
     public abstract class BaseView : MonoBehaviour, IView
     {
-        private CanvasGroup _canvasGroup;
-        private Canvas _canvas;
+        protected CanvasGroup CanvasGroup;
+        protected Canvas Canvas;
         
         [field: SerializeField] public BaseAnimationElement AnimationElement { get; private set; }
-        public bool IsActive { get; private set; } = true;
+        public bool IsActive { get; protected set; } = true;
         public bool IsInteractable { get; private set; }
 
         protected virtual void Awake()
         {
-            _canvasGroup = GetComponent<CanvasGroup>();
-            _canvas = GetComponent<Canvas>();
+            CanvasGroup = GetComponent<CanvasGroup>();
+            Canvas = GetComponent<Canvas>();
         }
 
         public virtual async UniTask Show()
@@ -43,13 +43,13 @@ namespace CodeBase.Core.UI.Views
         {
             if (IsActive == isActive) return;
             IsActive = isActive;
-            if (_canvas != null) _canvas.enabled = isActive;
+            if (Canvas != null) Canvas.enabled = isActive;
 
-            if (_canvasGroup != null)
+            if (CanvasGroup != null)
             {
-                _canvasGroup.alpha = isActive ? 1 : 0;
-                _canvasGroup.blocksRaycasts = isActive;
-                _canvasGroup.interactable = isActive;
+                CanvasGroup.alpha = isActive ? 1 : 0;
+                CanvasGroup.blocksRaycasts = isActive;
+                CanvasGroup.interactable = isActive;
             }
 
             gameObject.SetActive(isActive);
@@ -57,9 +57,6 @@ namespace CodeBase.Core.UI.Views
         
         public virtual void HideInstantly() => SetActive(false);
         
-        public virtual void Dispose()
-        {
-            // if (this) Destroy(gameObject);
-        } 
+        public virtual void Dispose() { } 
     }
 }

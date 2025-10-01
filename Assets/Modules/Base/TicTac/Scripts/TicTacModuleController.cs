@@ -24,6 +24,8 @@ namespace Modules.Base.TicTac.Scripts
         private readonly TicTacTutorialStatePresenter _tutorialStatePresenter;
         private readonly UniTaskCompletionSource _moduleCompletionSource;
         private readonly CompositeDisposable _disposables = new();
+        
+        private readonly ReactiveCommand<ModulesMap> _openNewModuleCommand = new();
 
         public TicTacModuleController(IScreenStateMachine screenStateMachine, TicTacModel moduleModel, 
             TicTacGameStatePresenter gameStatePresenter,
@@ -40,18 +42,19 @@ namespace Modules.Base.TicTac.Scripts
 
         public async UniTask Enter(object param)
         {
+            SubscribeToModuleUpdates();
+            
             // Configure FSM in model with separate state presenters
             _moduleModel.ConfigureStateMachine(
-                onEnterTutorial: () => _tutorialStatePresenter.Enter(null),
+                onEnterTutorial: async () => await _tutorialStatePresenter.Enter(_openNewModuleCommand),
                 onExitTutorial: () => _tutorialStatePresenter.Exit(),
-                onEnterGame: () => _gameStatePresenter.Enter(null),
+                onEnterGame: async () => await _gameStatePresenter.Enter(_openNewModuleCommand),
                 onExitGame: () => _gameStatePresenter.Exit(),
-                onEnterResult: () => _gameResultStatePresenter.Enter(null),
+                onEnterResult: async () => await _gameResultStatePresenter.Enter(_openNewModuleCommand),
                 onExitResult: () => _gameResultStatePresenter.Exit()
             );
 
             _moduleModel.StateMachine.OnTransitionCompleted(OnChangeState);
-            SubscribeToCommands();
 
             _gameStatePresenter.HideStateInstantly();
             _gameResultStatePresenter.HideStateInstantly();
@@ -83,86 +86,18 @@ namespace Modules.Base.TicTac.Scripts
             Debug.Log($"TicTac: Transitioned to {transition.Destination}");
         }
 
-        private void SubscribeToCommands()
+        private void SubscribeToModuleUpdates()
         {
-            // Subscribe to tutorial state commands with throttling
-            _tutorialStatePresenter.ContinueCommand
+            _openNewModuleCommand
                 .ThrottleFirst(TimeSpan.FromMilliseconds(_moduleModel.ModuleTransitionThrottleDelay))
-                .Subscribe(_ => OnContinueButtonClicked())
-                .AddTo(_disposables);
-            
-            _tutorialStatePresenter.ExitCommand
-                .ThrottleFirst(TimeSpan.FromMilliseconds(_moduleModel.ModuleTransitionThrottleDelay))
-                .Subscribe(_ => OnExitButtonClicked())
-                .AddTo(_disposables);
-
-            // Subscribe to game state commands with throttling
-            _gameStatePresenter.CellCommand
-                .ThrottleFirst(TimeSpan.FromMilliseconds(_moduleModel.CommandThrottleDelay))
-                .Subscribe(OnCellClicked)
-                .AddTo(_disposables);
-            
-            _gameStatePresenter.RestartCommand
-                .ThrottleFirst(TimeSpan.FromMilliseconds(_moduleModel.ModuleTransitionThrottleDelay))
-                .Subscribe(_ => OnRestartButtonClicked())
-                .AddTo(_disposables);
-            
-            _gameStatePresenter.MainMenuCommand
-                .ThrottleFirst(TimeSpan.FromMilliseconds(_moduleModel.ModuleTransitionThrottleDelay))
-                .Subscribe(_ => OnMainMenuButtonClicked())
-                .AddTo(_disposables);
-
-            // Subscribe to result state commands with throttling
-            _gameResultStatePresenter.RestartCommand
-                .ThrottleFirst(TimeSpan.FromMilliseconds(_moduleModel.ModuleTransitionThrottleDelay))
-                .Subscribe(_ => OnRestartButtonClicked())
-                .AddTo(_disposables);
-            
-            _gameResultStatePresenter.MainMenuCommand
-                .ThrottleFirst(TimeSpan.FromMilliseconds(_moduleModel.ModuleTransitionThrottleDelay))
-                .Subscribe(_ => OnMainMenuButtonClicked())
+                .Subscribe(RunNewModule)
                 .AddTo(_disposables);
         }
 
-        private async void OnCellClicked(int[] position)
-        {
-            if (_moduleModel.StateMachine.State != TicTacGameStates.Game) return;
-            
-            _moduleModel.MakeMove(position[0], position[1]);
-            
-            // Notify GameStatePresenter to update its view
-            _gameStatePresenter.UpdateBoardDisplay(_moduleModel.Board);
-                
-            char winner = _moduleModel.CheckWinner();
-            
-            if (winner != '\0')
-            {
-                var winningPositions = _moduleModel.GetWinningPositions();
-                _gameStatePresenter.MarkWinningCells(winningPositions);
-                await _moduleModel.ChangeState(TicTacGameTriggers.PlayerWon);
-            }
-            else if (_moduleModel.IsBoardFull()) 
-            {
-                await _moduleModel.ChangeState(TicTacGameTriggers.GameDraw);
-            }
-        }
-
-        private async void OnRestartButtonClicked() => 
-            await _moduleModel.ChangeState(TicTacGameTriggers.Restart);
-
-        private async void OnContinueButtonClicked() => 
-            await _moduleModel.ChangeState(TicTacGameTriggers.StartGame);
-
-        private void OnExitButtonClicked()
+        private void RunNewModule(ModulesMap screen)
         {
             _moduleCompletionSource.TrySetResult();
-            _screenStateMachine.RunModule(ModulesMap.MainMenu);
-        }
-
-        private void OnMainMenuButtonClicked()
-        {
-            _moduleCompletionSource.TrySetResult();
-            _screenStateMachine.RunModule(ModulesMap.MainMenu);
+            _screenStateMachine.RunModule(screen);
         }
     }
 }

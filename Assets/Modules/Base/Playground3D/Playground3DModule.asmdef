@@ -1,0 +1,28 @@
+{
+    "name": "Playground3DModule",
+    "rootNamespace": "",
+    "references": [
+        "Unity.InputSystem",
+        "Unity.TextMeshPro",
+        "VContainer",
+        "UniTask",
+        "R3.Unity",
+        "UniTask.DOTween",
+        "DOTween.Modules",
+        "Core",
+        "Systems",
+        "Services",
+        "UnityEditor.UI",
+        "UnityEngine.UI",
+        "Mirror"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
