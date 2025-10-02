@@ -6,17 +6,13 @@ namespace Modules.Base.Playground3D.Scripts.Gameplay.Player
     [RequireComponent(typeof(Animator))]
     public class PlayerGfx : MonoBehaviour
     {
-
         private Animator _animator;
         private CharacterController _characterController;
         private PlayerMoveController _moveController;
         private PlayerSfx _playerSfx;
         private Player _player;
         private bool _animationsEnabled = true;
-
-        // Public property for accessing Player reference
-        public Player Player => _player;
-
+        
         private int _animIDSpeed;
         private int _animIDGrounded;
         private int _animIDJump;
@@ -31,24 +27,19 @@ namespace Modules.Base.Playground3D.Scripts.Gameplay.Player
             _animator = GetComponent<Animator>();
             _characterController = GetComponent<CharacterController>();
             
-            // Get required components from the same GameObject
             _moveController = GetComponent<PlayerMoveController>();
-            if (!_moveController)
-            {
+            
+            if (!_moveController) 
                 Debug.LogError("PlayerMoveController not found on the same GameObject!");
-            }
             
             _playerSfx = GetComponent<PlayerSfx>();
-            if (!_playerSfx)
-            {
+            if (!_playerSfx) 
                 Debug.LogError("PlayerSfx not found on the same GameObject!");
-            }
             
             _player = GetComponent<Player>();
-            if (!_player)
-            {
+            
+            if (!_player) 
                 Debug.LogError("Player not found on the same GameObject!");
-            }
 
             AssignAnimationIDs();
         }
@@ -60,18 +51,18 @@ namespace Modules.Base.Playground3D.Scripts.Gameplay.Player
         
         public void OnTowTruckEntered()
         {
-            if (!_animationsEnabled) return; // Avoid redundant calls
+            if (!_animationsEnabled) return;
 
             _animationsEnabled = false;
-            _animator.enabled = false; // Disable animator to freeze animations
+            _animator.enabled = false;
         }
 
         public void OnTowTruckExited()
         {
-            if (_animationsEnabled) return; // Avoid redundant calls
+            if (_animationsEnabled) return;
 
             _animationsEnabled = true;
-            _animator.enabled = true; // Re-enable animator to resume animations
+            _animator.enabled = true;
         }
 
         private void AssignAnimationIDs()
@@ -85,44 +76,27 @@ namespace Modules.Base.Playground3D.Scripts.Gameplay.Player
 
         private void UpdateAnimations()
         {
-            if (_animator == null || _player == null) return;
+            if (!_animator || !_player) return;
             
-            // Use network data for non-owners, local data for owner
-            if (_player.IsOwned)
+            if (_player.IsLocalPlayer)
             {
                 // Owner uses direct move controller data
                 _animator.SetFloat(_animIDSpeed, _moveController.CurrentSpeed);
                 _animator.SetFloat(_animIDMotionSpeed, _moveController.InputMagnitude);
                 _animator.SetBool(_animIDGrounded, _moveController.IsGrounded);
 
-                if (_moveController.IsJumping)
-                {
-                    _animator.SetBool(_animIDJump, true);
-                }
-                else
-                {
-                    _animator.SetBool(_animIDJump, false);
-                }
+                _animator.SetBool(_animIDJump, _moveController.IsJumping);
 
-                if (_moveController.IsFalling)
-                {
-                    _animator.SetBool(_animIDFreeFall, true);
-                }
-                else
-                {
-                    _animator.SetBool(_animIDFreeFall, false);
-                }
+                _animator.SetBool(_animIDFreeFall, _moveController.IsFalling);
             }
             else
             {
                 // Non-owners use network synchronized data
                 _animator.SetFloat(_animIDSpeed, _player.NetworkSpeed);
-                _animator.SetFloat(_animIDMotionSpeed, _player.NetworkSpeed > 0.1f ? 1.0f : 0.0f);
+                _animator.SetFloat(_animIDMotionSpeed, _player.NetworkInputMagnitude);
                 _animator.SetBool(_animIDGrounded, _player.NetworkIsGrounded);
-                
-                // For non-owners, we don't have detailed jump/fall states, so simplified logic
-                _animator.SetBool(_animIDJump, false);
-                _animator.SetBool(_animIDFreeFall, !_player.NetworkIsGrounded);
+                _animator.SetBool(_animIDJump, _player.NetworkIsJumping);
+                _animator.SetBool(_animIDFreeFall, _player.NetworkIsFalling);
             }
         }
 
@@ -130,21 +104,19 @@ namespace Modules.Base.Playground3D.Scripts.Gameplay.Player
         private void OnFootstep(AnimationEvent animationEvent)
         {
             // Only play audio for owner or local player
-            if (_playerSfx != null && (_player == null || _player.IsOwned))
+            if (_playerSfx && (!_player || _player.IsLocalPlayer))
                 _playerSfx.OnFootstep(animationEvent);
         }
 
         private void OnLand(AnimationEvent animationEvent)
         {
             // Only play audio for owner or local player
-            if (_playerSfx != null && (_player == null || _player.IsOwned))
+            if (_playerSfx && (!_player || _player.IsLocalPlayer))
                 _playerSfx.OnLand(animationEvent);
             
             // Handle animation state for owner
-            if (animationEvent.animatorClipInfo.weight > 0.5f && _player != null && _player.IsOwned)
-            {
+            if (animationEvent.animatorClipInfo.weight > 0.5f && _player && _player.IsLocalPlayer) 
                 _animator.SetBool(_animIDJump, false);
-            }
         }
     }
 }

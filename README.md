@@ -44,9 +44,15 @@ Built-in tool for automatically creating new modules:
   - Stateless FSM demonstration with 3 states: Tutorial → Game → Result
   - Educational example of complex state management patterns
   - R3 reactive programming integration
+- **Playground3D**: 3D multiplayer sample module demonstrating **Mirror networking integration** *(in development)*
+  - Custom NetworkManager integrated with VContainer DI
+  - PlayerFactory system for dynamic player spawning with dependency injection
+  - Network player synchronization with SyncVar attributes
+  - 3D character controller with animations (idle, walk, run, jump)
+  - Educational example of multiplayer architecture patterns
 - **Converter**: Data conversion utility with unified MVP pattern
 - **MainMenu**: Main application menu with standard MVP architecture
-- **StartGame**: Game launch screen
+- **Bootstrap**: Game launch screen
 
 ### Test Modules
 - **PopupsTester**: Test module for demonstrating the popup system

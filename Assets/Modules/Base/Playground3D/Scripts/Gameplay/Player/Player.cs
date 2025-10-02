@@ -29,12 +29,22 @@ namespace Modules.Base.Playground3D.Scripts.Gameplay.Player
         [field: SyncVar] 
         public bool NetworkIsGrounded { get; private set; }
         
+        [field: SyncVar]
+        public bool NetworkIsJumping { get; private set; }
+        
+        [field: SyncVar]
+        public bool NetworkIsFalling { get; private set; }
+        
+        [field: SyncVar]
+        public float NetworkInputMagnitude { get; private set; }
+        
         [field: SyncVar] 
         public Vector3 NetworkPosition { get; private set; }
         
         [field: SyncVar]
         public Quaternion NetworkRotation { get; private set; }
 
+        public bool IsLocalPlayer => isLocalPlayer;
         public bool IsOwned => isOwned;
 
         // Public properties for component access
@@ -83,14 +93,23 @@ namespace Modules.Base.Playground3D.Scripts.Gameplay.Player
         private void Update()
         {
             // Only owner processes input and updates
-            if (isOwned)
+            if (IsLocalPlayer)
             {
                 if (IsInVehicle) return;
                 
                 MoveController.UpdateController();
                     
-                // Update network variables from movement controller
-                UpdateNetworkData();
+                // Send movement data to server for synchronization
+                CmdUpdateMovementData(
+                    transform.position,
+                    transform.rotation,
+                    MoveController.CurrentSpeed,
+                    MoveController.IsGrounded,
+                    MoveController.IsJumping,
+                    MoveController.IsFalling,
+                    MoveController.InputMagnitude,
+                    InteractionController.IsPlayerInVehicle
+                );
             }
             else
             {
@@ -107,14 +126,26 @@ namespace Modules.Base.Playground3D.Scripts.Gameplay.Player
             }
         }
 
-        private void UpdateNetworkData()
+        [Command]
+        private void CmdUpdateMovementData(
+            Vector3 position, 
+            Quaternion rotation, 
+            float speed, 
+            bool isGrounded,
+            bool isJumping,
+            bool isFalling,
+            float inputMagnitude,
+            bool isInVehicle)
         {
-            // Update network variables with current state
-            NetworkPosition = transform.position;
-            NetworkRotation = transform.rotation;
-            NetworkSpeed = MoveController.CurrentSpeed;
-            NetworkIsGrounded = MoveController.IsGrounded;
-            IsInVehicle = InteractionController.IsPlayerInVehicle;
+            // Server updates SyncVar fields, which auto-sync to all clients
+            NetworkPosition = position;
+            NetworkRotation = rotation;
+            NetworkSpeed = speed;
+            NetworkIsGrounded = isGrounded;
+            NetworkIsJumping = isJumping;
+            NetworkIsFalling = isFalling;
+            NetworkInputMagnitude = inputMagnitude;
+            IsInVehicle = isInVehicle;
         }
 
         private void InterpolateToNetworkData()
