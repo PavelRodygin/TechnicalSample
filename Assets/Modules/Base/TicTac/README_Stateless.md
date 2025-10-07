@@ -40,14 +40,28 @@ The state machine is configured in the `InitializeStateMachine()` method:
 
 ```csharp
 _stateMachine.Configure(CellState.Empty)
-    .OnEntry(() => OnEmptyStateEntered())
+    .OnEntry(OnEmptyStateEntered)
     .Permit(CellTrigger.SetX, CellState.X)
-    .Permit(CellTrigger.SetO, CellState.O);
+    .Permit(CellTrigger.SetO, CellState.O)
+    .Ignore(CellTrigger.Reset); // Already empty, ignore reset
+
+_stateMachine.Configure(CellState.X)
+    .OnEntry(OnXStateEntered)
+    .Permit(CellTrigger.Reset, CellState.Empty)
+    .Ignore(CellTrigger.SetX) // Already X, ignore
+    .Ignore(CellTrigger.SetO); // Can't change to O without reset
+
+_stateMachine.Configure(CellState.O)
+    .OnEntry(OnOStateEntered)
+    .Permit(CellTrigger.Reset, CellState.Empty)
+    .Ignore(CellTrigger.SetO) // Already O, ignore
+    .Ignore(CellTrigger.SetX); // Can't change to X without reset
 ```
 
 Each state has:
 - **OnEntry actions**: Visual updates when entering the state
 - **Permitted transitions**: Which triggers can cause state changes
+- **Ignored triggers**: Triggers that are silently ignored in this state (no warnings or errors)
 
 ## Additional Features
 

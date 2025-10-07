@@ -215,8 +215,8 @@ namespace CodeBase.Services.Input
                 _uiInputModule.actionsAsset = InputActions.asset;
                 Object.DontDestroyOnLoad(_eventSystem.gameObject);
             }
-            else
-                Debug.Log("Found existing EventSystem.");
+            // else
+            //     Debug.Log("Found existing EventSystem.");
         }
 
         /// <summary>

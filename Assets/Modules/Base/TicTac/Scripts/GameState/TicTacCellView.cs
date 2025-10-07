@@ -53,17 +53,22 @@ namespace Modules.Base.TicTac.Scripts.GameState
             _stateMachine.Configure(CellState.Empty)
                 .OnEntry(OnEmptyStateEntered)
                 .Permit(CellTrigger.SetX, CellState.X)
-                .Permit(CellTrigger.SetO, CellState.O);
+                .Permit(CellTrigger.SetO, CellState.O)
+                .Ignore(CellTrigger.Reset); // Already empty, ignore reset
             
             // X state configuration
             _stateMachine.Configure(CellState.X)
                 .OnEntry(OnXStateEntered)
-                .Permit(CellTrigger.Reset, CellState.Empty);
+                .Permit(CellTrigger.Reset, CellState.Empty)
+                .Ignore(CellTrigger.SetX) // Already X, ignore
+                .Ignore(CellTrigger.SetO); // Can't change to O without reset
             
             // O state configuration
             _stateMachine.Configure(CellState.O)
                 .OnEntry(OnOStateEntered)
-                .Permit(CellTrigger.Reset, CellState.Empty);
+                .Permit(CellTrigger.Reset, CellState.Empty)
+                .Ignore(CellTrigger.SetO) // Already O, ignore
+                .Ignore(CellTrigger.SetX); // Can't change to X without reset
         }
         
         public void Initialize(int x, int y, ReactiveCommand<int[]> cellCommand)
@@ -111,43 +116,20 @@ namespace Modules.Base.TicTac.Scripts.GameState
                 return;
             }
             
-            Debug.Log($"TicTacCellView {name}: Setting text '{text}' from state {_stateMachine.State}");
-            
             switch (text)
             {
                 case '\0':
-                    if (_stateMachine.CanFire(CellTrigger.Reset))
-                    {
-                        Debug.Log($"TicTacCellView {name}: Firing Reset trigger");
-                        _stateMachine.Fire(CellTrigger.Reset);
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"TicTacCellView {name}: Cannot fire Reset trigger from state {_stateMachine.State}");
-                    }
+                    _stateMachine.Fire(CellTrigger.Reset);
                     break;
+                    
                 case 'X':
-                    if (_stateMachine.CanFire(CellTrigger.SetX))
-                    {
-                        Debug.Log($"TicTacCellView {name}: Firing SetX trigger");
-                        _stateMachine.Fire(CellTrigger.SetX);
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"TicTacCellView {name}: Cannot fire SetX trigger from state {_stateMachine.State}");
-                    }
+                    _stateMachine.Fire(CellTrigger.SetX);
                     break;
+                    
                 case 'O':
-                    if (_stateMachine.CanFire(CellTrigger.SetO))
-                    {
-                        Debug.Log($"TicTacCellView {name}: Firing SetO trigger");
-                        _stateMachine.Fire(CellTrigger.SetO);
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"TicTacCellView {name}: Cannot fire SetO trigger from state {_stateMachine.State}");
-                    }
+                    _stateMachine.Fire(CellTrigger.SetO);
                     break;
+                    
                 default:
                     Debug.LogWarning($"TicTacCellView {name}: Unknown text character '{text}'");
                     break;

@@ -30,23 +30,19 @@ namespace Modules.Base.Playground3D.Scripts.Network
             base.OnStartServer();
             Debug.Log("🌐 OnStartServer: Customizing AddPlayer handler");
 
-            // Замени дефолтный хендлер на кастомный (пропусти проверку playerPrefab)
             NetworkServer.ReplaceHandler<AddPlayerMessage>(CustomOnServerAddPlayerInternal);
         }
         
         private void CustomOnServerAddPlayerInternal(NetworkConnectionToClient conn, AddPlayerMessage msg)
         {
             Debug.Log($"📩 Custom AddPlayerMessage handler for conn {conn.connectionId}");
-
-            // Пропусти проверки на playerPrefab (мы не используем его)
-            // Только проверь, если игрок уже существует
+            
             if (conn.identity)
             {
                 Debug.LogError("There is already a player for this connection.");
                 return;
             }
 
-            // Вызови наш override для спавна
             OnServerAddPlayer(conn);
         }
         
@@ -57,8 +53,7 @@ namespace Modules.Base.Playground3D.Scripts.Network
             Transform startPos = GetStartPosition();
             Vector3 spawnPosition = startPos ? startPos.position : Vector3.zero;
             Quaternion spawnRotation = startPos ? startPos.rotation : Quaternion.identity;
-    
-            // Передай connId в спавнер
+            
             GameObject player = _playerSpawner.SpawnPlayer(conn.connectionId, spawnPosition, spawnRotation);
     
             if (player) 
@@ -135,7 +130,7 @@ namespace Modules.Base.Playground3D.Scripts.Network
         private void UnSpawnPlayerHandler(GameObject spawned)
         {
             Debug.Log($"🗑️ UnSpawn: {spawned.name}");
-            Destroy(spawned);  // Или pooling, если optimize
+            Destroy(spawned);   //TODO Add pooling
         }
         
         #endregion

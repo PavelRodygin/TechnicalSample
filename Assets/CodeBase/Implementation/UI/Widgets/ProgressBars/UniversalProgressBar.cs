@@ -10,7 +10,7 @@ namespace CodeBase.Implementation.UI.Widgets.ProgressBars
         [SerializeField] private TMP_Text progressValueText;
         [SerializeField] private Image progressBarFillImage;
         
-        private float _currentProgress = 0f;
+        private float _currentProgress;
         
         protected override void UpdateProgressVisual(float progress)
         {
@@ -26,8 +26,7 @@ namespace CodeBase.Implementation.UI.Widgets.ProgressBars
             {
                 var percentage = (int)(exponentialProgress * 100);
                 progressValueText.text = $"{percentage}%";
-                // Debug log to verify text updates
-                Debug.Log($"[UniversalProgressBar] Progress: {progress:F2} -> Exponential: {exponentialProgress:F2} -> Text: {percentage}%");
+                // Debug.Log($"[UniversalProgressBar] Progress: {progress:F2} -> Exponential: {exponentialProgress:F2} -> Text: {percentage}%");
             }
             else
             {
