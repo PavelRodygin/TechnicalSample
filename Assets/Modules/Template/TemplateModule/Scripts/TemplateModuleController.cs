@@ -2,9 +2,7 @@ using System;
 using CodeBase.Core.Infrastructure;
 using CodeBase.Core.Infrastructure.Modules;
 using Cysharp.Threading.Tasks;
-using MediatR;
 using R3;
-using VContainer;
 
 namespace Modules.Template.TemplateModule.Scripts
 {
@@ -24,7 +22,6 @@ namespace Modules.Template.TemplateModule.Scripts
     /// </summary>
     public class TemplateModuleController : IModuleController
     {
-        [Inject] private IMediator _mediator;
         private readonly UniTaskCompletionSource _moduleCompletionSource;
         private readonly TemplateModuleModel _templateModuleModel;
         private readonly TemplatePresenter _templatePresenter;

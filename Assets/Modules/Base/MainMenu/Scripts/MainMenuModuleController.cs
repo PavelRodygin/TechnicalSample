@@ -2,15 +2,12 @@
 using CodeBase.Core.Infrastructure;
 using CodeBase.Core.Infrastructure.Modules;
 using Cysharp.Threading.Tasks;
-using MediatR;
 using R3;
-using VContainer;
 
 namespace Modules.Base.MainMenu.Scripts
 {
     public class MainMenuModuleController : IModuleController
     {
-        [Inject] private IMediator _mediator;
         private readonly UniTaskCompletionSource _moduleCompletionSource;
         private readonly MainMenuModuleModel _mainMenuModuleModel;
         private readonly MainMenuPresenter _mainMenuPresenter;

@@ -1,4 +1,3 @@
-using CodeBase.Core;
 using CodeBase.Services.SceneInstallerService;
 using UnityEngine;
 using VContainer;
@@ -26,8 +25,6 @@ namespace Modules.Template.TemplateModule.Scripts
         public override void RegisterSceneDependencies(IContainerBuilder builder)
         {
             base.RegisterSceneDependencies(builder);
-
-            builder.AddMediatR(typeof(TemplateHandler).Assembly);
             
             // Register main module controller
             builder.Register<TemplateModuleController>(Lifetime.Singleton);

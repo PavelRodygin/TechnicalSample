@@ -1,5 +1,4 @@
-﻿using CodeBase.Core;
-using CodeBase.Services.SceneInstallerService;
+﻿using CodeBase.Services.SceneInstallerService;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -13,8 +12,6 @@ namespace Modules.Base.MainMenu.Scripts
         public override void RegisterSceneDependencies(IContainerBuilder builder)
         {
             base.RegisterSceneDependencies(builder);
-
-            builder.AddMediatR(typeof(MainMenuHandler).Assembly);
             
             builder.Register<MainMenuModuleController>(Lifetime.Singleton);
             

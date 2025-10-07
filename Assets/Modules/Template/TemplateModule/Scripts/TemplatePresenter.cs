@@ -1,31 +1,13 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using CodeBase.Core.Infrastructure;
 using CodeBase.Core.Systems;
 using CodeBase.Core.Systems.PopupHub;
 using Cysharp.Threading.Tasks;
-using MediatR;
 using R3;
-using UnityEngine;
 using Unit = R3.Unit;
 
 namespace Modules.Template.TemplateModule.Scripts
 {
-    /// <summary>
-    /// Request handler for Template module operations
-    /// </summary>
-    public class TemplateRequest : IRequest<string> { }
-
-    /// <summary>
-    /// Handler for Template module requests
-    /// </summary>
-    public class TemplateHandler : IRequestHandler<TemplateRequest, string>
-    {
-        public Task<string> Handle(TemplateRequest request, CancellationToken cancellationToken) => 
-            Task.FromResult("Template Handler Invoked!");
-    }
-    
     /// <summary>
     /// Presenter for Template module that handles business logic and coordinates between Model and View
     /// 

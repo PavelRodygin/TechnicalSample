@@ -1,4 +1,3 @@
-using CodeBase.Core;
 using CodeBase.Services.SceneInstallerService;
 using Modules.Base.GameModule.Scripts.Gameplay.Systems;
 using Modules.Base.Playground3D.Scripts.Gameplay.Player.Factory;
@@ -19,8 +18,6 @@ namespace Modules.Base.Playground3D.Scripts
         public override void RegisterSceneDependencies(IContainerBuilder builder)
         {
             base.RegisterSceneDependencies(builder);
-
-            builder.AddMediatR(typeof(Playground3DHandler).Assembly);
             
             builder.Register<Playground3DModuleController>(Lifetime.Singleton);
             

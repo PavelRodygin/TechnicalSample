@@ -1,30 +1,13 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using CodeBase.Core.Infrastructure;
 using CodeBase.Core.Systems;
 using CodeBase.Core.Systems.PopupHub;
 using Cysharp.Threading.Tasks;
-using MediatR;
 using R3;
 using Unit = R3.Unit;
 
 namespace Modules.Base.Playground3D.Scripts
 {
-    /// <summary>
-    /// Request handler for Playground3D module operations
-    /// </summary>
-    public class Playground3DRequest : IRequest<string> { }
-
-    /// <summary>
-    /// Handler for Playground3D module requests
-    /// </summary>
-    public class Playground3DHandler : IRequestHandler<Playground3DRequest, string>
-    {
-        public Task<string> Handle(Playground3DRequest request, CancellationToken cancellationToken) => 
-            Task.FromResult("Playground3D Handler Invoked!");
-    }
-    
     /// <summary>
     /// Presenter for Playground3D module that handles business logic and coordinates between Model and View
     /// 
