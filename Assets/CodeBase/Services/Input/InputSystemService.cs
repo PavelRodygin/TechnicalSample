@@ -42,7 +42,7 @@ namespace CodeBase.Services.Input
         {
             InputActions.PlayerHumanoid.Disable();
             InputActions.Crane.Disable();
-            InputActions.UI.Enable(); // Убеждаемся, что UI всегда включён
+            InputActions.UI.Enable();
             Debug.Log("Switched to UI mode.");
             OnSwitchToUI?.Invoke();
         }
@@ -54,7 +54,7 @@ namespace CodeBase.Services.Input
         {
             InputActions.Crane.Disable();
             InputActions.PlayerHumanoid.Enable();
-            InputActions.UI.Enable(); // UI остаётся включённым
+            InputActions.UI.Enable();
             Debug.Log("Switched to PlayerHumanoid mode.");
             OnSwitchToPlayerHumanoid?.Invoke();
         }
@@ -66,7 +66,7 @@ namespace CodeBase.Services.Input
         {
             InputActions.PlayerHumanoid.Disable();
             InputActions.Crane.Enable();
-            InputActions.UI.Enable(); // UI остаётся включённым
+            InputActions.UI.Enable();
             Debug.Log("Switched to Crane mode.");
             OnSwitchToCrane?.Invoke();
         }
@@ -86,7 +86,7 @@ namespace CodeBase.Services.Input
         public void DisableUI()
         {
             Debug.LogWarning("UI Action Map cannot be disabled as per design.");
-            InputActions.UI.Enable(); // Игнорируем попытку отключения
+            InputActions.UI.Enable();
         }
 
         /// <summary>
@@ -204,20 +204,88 @@ namespace CodeBase.Services.Input
         }
 
         /// <summary>
-        /// Initializes the EventSystem, creating a new one if it doesn't exist.
+        /// Ensures only one EventSystem exists in the scene. Critical for scene switching and WebGL.
         /// </summary>
-        private void InitializeEventSystem()    
+        public void EnsureSingleEventSystem()
         {
-            _eventSystem = Object.FindObjectOfType<EventSystem>();
-            if (!_eventSystem)
+            var allEventSystems = Object.FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+            
+            if (allEventSystems.Length == 0)
             {
+                Debug.LogWarning("No EventSystem found. Creating new one.");
                 _eventSystem = CreateEventSystem();
                 _uiInputModule.actionsAsset = InputActions.asset;
                 Object.DontDestroyOnLoad(_eventSystem.gameObject);
             }
-            // else
-            //     Debug.Log("Found existing EventSystem.");
+            else if (allEventSystems.Length == 1)
+            {
+                _eventSystem = allEventSystems[0];
+                EnsureEventSystemHasInputModule();
+            }
+            else
+            {
+                // Multiple EventSystems found - remove duplicates
+                Debug.LogWarning($"Found {allEventSystems.Length} EventSystems. Removing duplicates.");
+                
+                EventSystem persistentEventSystem = null;
+                
+                // Find the DontDestroyOnLoad EventSystem if exists
+                foreach (var es in allEventSystems)
+                {
+                    if (es.gameObject.scene.name != null && es.gameObject.scene.name != "DontDestroyOnLoad") continue;
+                    
+                    persistentEventSystem = es;
+                    break;
+                }
+                
+                // If no persistent EventSystem, use the first one
+                if (!persistentEventSystem)
+                    persistentEventSystem = allEventSystems[0];
+                
+                _eventSystem = persistentEventSystem;
+                
+                // Destroy all other EventSystems
+                foreach (var es in allEventSystems)
+                {
+                    if (es == persistentEventSystem) continue;
+                    
+                    Debug.Log($"Destroying duplicate EventSystem: {es.gameObject.name}");
+                    Object.Destroy(es.gameObject);
+                }
+                
+                EnsureEventSystemHasInputModule();
+            }
         }
+
+        /// <summary>
+        /// Ensures the EventSystem has a properly configured InputSystemUIInputModule.
+        /// </summary>
+        private void EnsureEventSystemHasInputModule()
+        {
+            if (!_eventSystem) return;
+
+            var inputModule = _eventSystem.GetComponent<InputSystemUIInputModule>();
+            
+            if (!inputModule)
+            {
+                Debug.LogWarning("EventSystem missing InputSystemUIInputModule. Adding it.");
+                _uiInputModule = _eventSystem.gameObject.AddComponent<InputSystemUIInputModule>();
+                _uiInputModule.actionsAsset = InputActions.asset;
+            }
+            else
+            {
+                _uiInputModule = inputModule;
+                if (!_uiInputModule.actionsAsset && InputActions != null)
+                {
+                    _uiInputModule.actionsAsset = InputActions.asset;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Initializes the EventSystem, creating a new one if it doesn't exist.
+        /// </summary>
+        private void InitializeEventSystem() => EnsureSingleEventSystem();
 
         /// <summary>
         /// Initializes the InputSystem_Actions.

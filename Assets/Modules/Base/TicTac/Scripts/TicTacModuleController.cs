@@ -83,7 +83,7 @@ namespace Modules.Base.TicTac.Scripts
 
         private void OnChangeState(StateMachine<TicTacGameStates, TicTacGameTriggers>.Transition transition)
         {
-            Debug.Log($"TicTac: Transitioned to {transition.Destination}");
+            Debug.Log($"OnChangeState: {transition.Trigger} -> {transition.Destination}");
         }
 
         private void SubscribeToModuleUpdates()

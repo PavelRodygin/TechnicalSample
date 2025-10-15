@@ -4,6 +4,7 @@ using Modules.Base.TicTac.Scripts.GameState;
 using Modules.Base.TicTac.Scripts.TutorialState;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Modules.Base.TicTac.Scripts
 {
@@ -18,9 +19,9 @@ namespace Modules.Base.TicTac.Scripts
             base.RegisterSceneDependencies(builder);
 
             // Register Views for their respective Presenters
-            builder.RegisterInstance(ticTacGameStateView).As<TicTacGameStateView>();
-            builder.RegisterInstance(ticTacGameResultStateView).As<TicTacGameResultStateView>();
-            builder.RegisterInstance(ticTacTutorialStateView).As<TicTacTutorialStateView>();
+            builder.RegisterComponent(ticTacGameStateView).As<TicTacGameStateView>();
+            builder.RegisterComponent(ticTacGameResultStateView).As<TicTacGameResultStateView>();
+            builder.RegisterComponent(ticTacTutorialStateView).As<TicTacTutorialStateView>();
             
             builder.Register<TicTacModel>(Lifetime.Singleton);
             

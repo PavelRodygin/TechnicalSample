@@ -24,12 +24,16 @@ namespace CodeBase.Implementation.UI.Views.Animations.ShowHideAnimations
         public override async UniTask Show()
         {
             canvasGroup.alpha = 0;
-            await canvasGroup.DOFade(1, fadeDuration);
+            await canvasGroup.DOFade(1, fadeDuration)
+                .SetLink(gameObject)
+                .SetUpdate(true);
         }
 
         public override async UniTask Hide()
         {
-                await canvasGroup.DOFade(0, fadeDuration);
+            await canvasGroup.DOFade(0, fadeDuration)
+                .SetLink(gameObject)
+                .SetUpdate(true);
         }
     }
 }

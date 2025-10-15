@@ -44,7 +44,7 @@ namespace Modules.Base.Playground3D.Scripts.Network
                 return null;
             }
                 
-            player.name = $"Player [connId={connId}]";  // Теперь с реальным connId
+            player.name = $"Player [connId={connId}]";  // Now with real connId
 
             return player;
         }

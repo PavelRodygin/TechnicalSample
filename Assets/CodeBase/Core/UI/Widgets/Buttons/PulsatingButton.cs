@@ -29,7 +29,7 @@ namespace CodeBase.Core.UI.Widgets.Buttons
             if (_animationSequence != null && _animationSequence.IsActive())
             {
                 _animationSequence.Kill();
-                pulsatingButton.transform.localScale = Vector3.one; // Сброс масштаба до исходного (returning to the initial scale)
+                pulsatingButton.transform.localScale = Vector3.one; // Reset scale to original
             }
         }
 

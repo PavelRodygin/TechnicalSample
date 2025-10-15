@@ -154,8 +154,8 @@ namespace CodeBase.Services
             }
 
             var scenesToUnload = _loadedModuleScenes
-                .Except(_activeModuleScenes) // Исключение активных сцен (exclusion of the active scenes)
-                .Except(_staticModuleScenes) // Исключение постоянных сцен (exclusion of the static scenes that we need for the whole project)
+                .Except(_activeModuleScenes) // Exclusion of the active scenes
+                .Except(_staticModuleScenes) // Exclusion of the static scenes that we need for the whole project
                 .ToList();
 
             List<UniTask> unloadTasks = new List<UniTask>();

@@ -24,9 +24,10 @@ namespace CodeBase.Core.UI.Views
         public virtual async UniTask Show()
         {
             SetActive(true);
-            if (IsActive && AnimationElement)
+            
+            if (IsActive && AnimationElement) 
                 await AnimationElement.Show();
-
+            
             IsInteractable = true;
         }
 
@@ -43,9 +44,9 @@ namespace CodeBase.Core.UI.Views
         {
             if (IsActive == isActive) return;
             IsActive = isActive;
-            if (Canvas != null) Canvas.enabled = isActive;
+            if (Canvas) Canvas.enabled = isActive;
 
-            if (CanvasGroup != null)
+            if (CanvasGroup)
             {
                 CanvasGroup.alpha = isActive ? 1 : 0;
                 CanvasGroup.blocksRaycasts = isActive;

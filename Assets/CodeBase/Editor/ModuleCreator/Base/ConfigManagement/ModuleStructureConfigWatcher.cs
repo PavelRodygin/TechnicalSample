@@ -24,7 +24,7 @@ namespace CodeBase.Editor.ModuleCreator.Base.ConfigManagement
             foreach (string asset in importedAssets)
             {
                 if (asset != ModuleStructureConfigWatcher.ConfigPath) continue;
-                Debug.Log("ModuleStructureConfig изменён! Перезагрузка путей...");
+                Debug.Log("ModuleStructureConfig changed! Reloading paths...");
                 ModulePathCache.RefreshPaths();
             }
         }

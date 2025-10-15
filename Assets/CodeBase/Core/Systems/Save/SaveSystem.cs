@@ -4,7 +4,7 @@ using VContainer.Unity;
 
 namespace CodeBase.Core.Systems.Save
 {
-	//TODO Dispose бы не помешал, раз мы в конструкторе подписываемся на ивенты
+	//TODO Dispose would be useful since we subscribe to events in the constructor
 	public class SaveSystem : IStartable
 	{
 		private readonly List<ISerializableDataSystem> _serializableDataSystems = new();

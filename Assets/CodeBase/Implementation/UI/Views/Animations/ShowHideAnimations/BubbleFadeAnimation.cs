@@ -34,7 +34,9 @@ namespace CodeBase.Implementation.UI.Views.Animations.ShowHideAnimations
             await Sequence
                 .Append(transform.DOScale(scaleUpFactor, scaleDuration / 2))
                 .Join(canvasGroup.DOFade(1, fadeDuration))
-                .Append(transform.DOScale(1, scaleDuration / 2));
+                .Append(transform.DOScale(1, scaleDuration / 2))
+                .SetLink(gameObject)
+                .SetUpdate(true);
         }
 
         public override async UniTask Hide()
@@ -43,7 +45,9 @@ namespace CodeBase.Implementation.UI.Views.Animations.ShowHideAnimations
             await Sequence
                 .Append(transform.DOScale(scaleUpFactor, scaleDuration / 2))
                 .Join(canvasGroup.DOFade(0, fadeDuration))
-                .Append(transform.DOScale(0, scaleDuration / 2));
+                .Append(transform.DOScale(0, scaleDuration / 2))
+                .SetLink(gameObject)
+                .SetUpdate(true);
         }
     }
 }

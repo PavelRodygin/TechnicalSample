@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 namespace CodeBase.Services.LongInitializationServices
 {
@@ -8,18 +9,18 @@ namespace CodeBase.Services.LongInitializationServices
         private bool _isInitialized;
         protected static int DelayTime = 1;
 
-        public Task Init()   
+        public async Task Init()   
         {
             if (!_isInitialized)
-                return InitializeAsync();
-
-            Console.WriteLine("LongInitializationService is already initialized.");
-            return Task.CompletedTask;
+                await InitializeAsync();
+            else
+                Console.WriteLine("LongInitializationService is already initialized.");
         }
 
         private async Task InitializeAsync()
         {
-            await Task.Delay(TimeSpan.FromSeconds(DelayTime));
+            // Use UniTask.Delay instead of Task.Delay for better WebGL compatibility
+            await UniTask.Delay(TimeSpan.FromSeconds(DelayTime));
             _isInitialized = true;
         }
     }

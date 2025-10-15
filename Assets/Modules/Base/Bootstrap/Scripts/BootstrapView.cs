@@ -1,6 +1,5 @@
 using System.Threading;
 using CodeBase.Core.UI.Views;
-using CodeBase.Core.UI.Views.Animations;
 using CodeBase.Core.UI.Widgets.ProgressBars;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;

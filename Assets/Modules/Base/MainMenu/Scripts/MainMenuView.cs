@@ -64,8 +64,6 @@ namespace Modules.Base.MainMenu.Scripts
 
         public void SetupEventListeners(MainMenuCommands commands)
         {
-            _inputSystemService.SwitchToUI();
-            
             converterButton.OnClickAsObservable()
                 .Where(_ => IsActive)
                 .Subscribe(_ => commands.OpenConverterCommand.Execute(default))
@@ -99,10 +97,8 @@ namespace Modules.Base.MainMenu.Scripts
 
         public override async UniTask Show()
         {
-            await base.Show();
-            
-            _inputSystemService.SwitchToUI();
             OnScreenEnabled();
+            await base.Show();
         }
 
         public void InitializeSoundToggle(bool isMusicOn) => musicToggle.SetIsOnWithoutNotify(isMusicOn);

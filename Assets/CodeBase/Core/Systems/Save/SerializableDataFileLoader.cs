@@ -8,7 +8,7 @@ namespace CodeBase.Core.Systems.Save
 {
 	public class SerializableDataFileLoader
 	{
-		// Используем временный файл для атомарности операции
+		// Using a temporary file for atomic operation
 		private const string SaveFileName = "save.json";
 		private const string TempSaveFileName = "temp_save.json";
 

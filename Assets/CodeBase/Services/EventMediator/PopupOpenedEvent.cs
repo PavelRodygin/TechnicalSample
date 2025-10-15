@@ -1,6 +1,6 @@
 namespace CodeBase.Services.EventMediator
 {
-    //TODO Абстракцию для событий надо, чтобы грамотно разделять Core и Implementation
+    //TODO Need abstraction for events to properly separate Core and Implementation
     public class PopupOpenedEvent
     {
         //Represents an event that encapsulates the name of the popup that was opened.

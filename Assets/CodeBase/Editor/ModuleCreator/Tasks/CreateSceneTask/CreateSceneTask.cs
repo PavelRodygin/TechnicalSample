@@ -58,8 +58,8 @@ namespace CodeBase.Editor.ModuleCreator.Tasks.CreateSceneTask
             // Force asset database refresh after creating view instance to ensure it is indexed
             UnityEditor.AssetDatabase.Refresh();
 
-            //TODO Ошибка появилась после замены "Scripts"
-            //TODO Здесь проблема. Скрипт успевает создаваться, однако он не обнаруживается 55-ой строчкой.
+            //TODO Error appeared after replacing "Scripts"
+            //TODO Problem here. The script is created, but it is not detected by line 55.
             string installerName = $"{_moduleName}ModuleInstaller";
             string folderType = PathManager.GetFolderType(_targetModuleFolderPath);
             string installerFullName = 

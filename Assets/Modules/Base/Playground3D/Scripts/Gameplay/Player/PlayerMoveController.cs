@@ -60,7 +60,7 @@ namespace Modules.Base.Playground3D.Scripts.Gameplay.Player
         // Public property for accessing Player reference
         public Player Player => _player;
         
-        // Публичные свойства для передачи данных в PlayerGfx
+        // Public properties for passing data to PlayerGfx
         public float CurrentSpeed => _speed;
         public float InputMagnitude => _moveInput.magnitude;
         public bool IsGrounded => grounded;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CodeBase.Editor.ModuleCreator.Base.ConfigManagement
 {
-    //TODO Закешировать найденый конфиг. Иксть один раз. Если не найден - лог еррор. Если найден - сохраняю в поле
+    //TODO Cache the found config. Read once. If not found - log error. If found - save to field
     [InitializeOnLoad]
     public static class ModulePathCache
     {

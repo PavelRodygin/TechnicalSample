@@ -107,7 +107,7 @@ namespace Modules.Base.Playground3D.Scripts.Network
             
             try
             {
-                // Client-side creation с DI через factory
+                // Client-side creation with DI via factory
                 var player = _playerFactory.Create(msg.position, msg.rotation);
                 if (player != null)
                 {
@@ -120,7 +120,7 @@ namespace Modules.Base.Playground3D.Scripts.Network
             catch (System.Exception ex)
             {
                 Debug.LogError($"❌ Client spawn failed: {ex.Message}. Using fallback.");
-                // Fallback: Без DI, но чтобы не крашить
+                // Fallback: Without DI, but to avoid crashing
                 var fallback = Instantiate(playerPrefab, msg.position, msg.rotation);
                 fallback.transform.localScale = msg.scale;
                 return fallback;

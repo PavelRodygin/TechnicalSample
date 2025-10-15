@@ -9,9 +9,9 @@ using VContainer;
 
 namespace CodeBase.Core.Systems.PopupHub.Popups
 {
-    //TODO вынести системы в глобальный контекст (Scripts) чтобы их мог видеть кор и импоементейшн
-    //TODO не, не надо. Абстракция(кор) не должен знать о уже реализованных системах. Надо что-то придумать. Точно! Интерфей для попап хаба и прочего.
-    //Это позволит нам создавать хорошие базовые классы работающие с абстрацкией модулей и нужных систем!
+    //TODO Move systems to global context (Scripts) so that Core and Implementation can see them
+    //TODO No, we shouldn't. Abstraction (Core) should not know about already implemented systems. Need to think of something. Exactly! Interface for popup hub and others.
+    //This will allow us to create good base classes working with module abstraction and needed systems!
     public class BasePopup : MonoBehaviour
     {
         [Inject][HideInInspector] public BasePopupCanvas Canvas;
@@ -26,7 +26,7 @@ namespace CodeBase.Core.Systems.PopupHub.Popups
         
         private TaskCompletionSource<bool> Tcs => _tcs ??= new TaskCompletionSource<bool>();
 
-        //TODO ДОДЕЛАТЬ! Сделать абстракцию для этой очереди
+        //TODO Create abstraction for this queue
         [SerializeField] protected PopupsPriority priority = PopupsPriority.Medium;
         public PopupsPriority Priority => priority;
 

@@ -27,7 +27,7 @@ namespace CodeBase.Systems
 	}
 }
 
-/* Тестовая версия без
+/* Test version without
 
 using System;
 using UnityEngine;

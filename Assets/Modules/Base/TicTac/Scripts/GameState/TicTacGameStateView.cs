@@ -28,8 +28,6 @@ namespace Modules.Base.TicTac.Scripts.GameState
 
         public void SetupEventListeners(TicTacCommands commands)
         {
-            Debug.Log("TicTacView: Setting up event listeners");
-            
             if (mainMenuButton != null)
                 mainMenuButton.OnClickAsObservable()
                     .Where(_ => IsActive)
@@ -50,8 +48,6 @@ namespace Modules.Base.TicTac.Scripts.GameState
 
             if (cellViews != null)
             {
-                Debug.Log($"TicTacView: Initializing {cellViews.Length} cell views");
-                
                 for (int i = 0; i < BoardSize; i++)
                 {
                     for (int j = 0; j < BoardSize; j++)
@@ -59,7 +55,6 @@ namespace Modules.Base.TicTac.Scripts.GameState
                         int index = i * BoardSize + j;
                         if (index < cellViews.Length && cellViews[index] != null)
                         {
-                            Debug.Log($"TicTacView: Initializing cell view [{i},{j}] at index {index}");
                             cellViews[index].Initialize(i, j, commands.CellClickCommand);
                         }
                         else
@@ -73,8 +68,6 @@ namespace Modules.Base.TicTac.Scripts.GameState
             {
                 Debug.LogError("TicTacView: cellViews array is null!");
             }
-            
-            Debug.Log("TicTacView: Event listeners setup complete");
         }
 
         public void UpdateBoard(char[,] board)
@@ -106,8 +99,6 @@ namespace Modules.Base.TicTac.Scripts.GameState
                 return;
             }
             
-            Debug.Log($"TicTacView: Clearing board with {cellViews.Length} cell views");
-            
             foreach (var cellView in cellViews)
             {
                 if (cellView != null)
@@ -131,8 +122,6 @@ namespace Modules.Base.TicTac.Scripts.GameState
             
             if (winnerText != null)
                 winnerText.text = "";
-                
-            Debug.Log("TicTacView: Board cleared successfully");
         }
 
         public void ShowWinner(char winner) => winnerText.text = $"Winner: {winner}";
