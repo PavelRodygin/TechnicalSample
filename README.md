@@ -2,6 +2,14 @@
 
 A technical repository with a Unity project containing my main architectural template for creating applications and games.
 
+## 🌐 WebGL Demo
+
+The project is available on **Unity Play** with a WebGL version that you can try directly in your browser:
+
+**[▶️ Play on Unity Play](https://play.unity.com/en/games/8122daff-f003-466f-9eb4-fd11cb5fbcdc/idofront)**
+
+This allows you to explore the modules and architecture without downloading or installing anything.
+
 ## 🏗️ Architecture
 
 The project is built on a modular architecture, where each module is independent, testable, and isolated. The module architecture follows the MVP (Model-View-Presenter) pattern, with the ability to add sub-states to the module using the .NET Stateless library, which is perfect for this task. The modularity of the architecture supports powerful SceneManagement and comprehensive work with DI (VContainer is used in the project).
