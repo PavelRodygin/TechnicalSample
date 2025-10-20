@@ -21,7 +21,7 @@ namespace CodeBase.Services
         PopupTester
     }
     
-    public class SceneService
+    public class SceneService : ISceneLoader
     {
         private readonly List<string> _staticModuleScenes = new();
         private List<string> _activeModuleScenes = new();
@@ -104,6 +104,21 @@ namespace CodeBase.Services
             }
 
             await UniTask.WhenAll(loadTasks); //wait until all the additive scenes have been loaded
+        }
+
+        public async UniTask LoadSceneAsyncAdditive(string sceneName)
+        {
+            await LoadSceneAsync(sceneName, true);
+        }
+
+        public async UniTask UnloadSceneAsync(string sceneName)
+        {
+            var sceneToUnload = SceneManager.GetSceneByName(sceneName);
+            if (sceneToUnload.IsValid() && sceneToUnload.isLoaded)
+            {
+                await SceneManager.UnloadSceneAsync(sceneName);
+                _loadedModuleScenes.Remove(sceneName);
+            }
         }
 
         private async UniTask LoadSceneAsync(string sceneName, bool additive)

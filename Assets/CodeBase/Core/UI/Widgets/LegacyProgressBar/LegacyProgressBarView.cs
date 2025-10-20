@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine.UI;
 
-namespace CodeBase.Core.UI.Widgets.ProgressBars
+namespace CodeBase.Core.UI.Widgets.LegacyProgressBar
 {
     public class LegacyProgressBarView : BaseLegacyProgressBarView
     {

@@ -1,0 +1,33 @@
+{
+    "name": "Server",
+    "rootNamespace": "",
+    "references": [
+        "DOTween.Modules",
+        "UniTask.DOTween",
+        "R3.Unity",
+        "UniTask",
+        "VContainer",
+        "Core",
+        "Services",
+        "Systems",
+        "Bootstrap",
+        "MainMenu",
+        "Converter",
+        "TicTac",
+        "Playground3DModule",
+        "PopupTesterModule",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI",
+        "UnityEditor.UI",
+        "Shared"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

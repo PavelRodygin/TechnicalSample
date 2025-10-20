@@ -79,7 +79,9 @@ namespace CodeBase.Implementation.Infrastructure
             builder.Register<AudioListenerService>(Lifetime.Singleton)
                 .AsSelf();
             
-            builder.Register<SceneService>(Lifetime.Singleton);
+            builder.Register<SceneService>(Lifetime.Singleton)
+                .AsImplementedInterfaces()
+                .AsSelf();
             builder.Register<SceneInstallerService>(Lifetime.Singleton);
             builder.Register<LoadingServiceProvider>(Lifetime.Singleton);
         }
